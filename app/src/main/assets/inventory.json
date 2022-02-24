@@ -1,0 +1,12 @@
+{
+  "meal":{
+    "apple" : 10,
+    "banana" : 5,
+    "soul" : 3
+  },
+  "needs":{
+    "happy": 100,
+    "hungry": 100,
+    "sleep": 100
+  }
+}
