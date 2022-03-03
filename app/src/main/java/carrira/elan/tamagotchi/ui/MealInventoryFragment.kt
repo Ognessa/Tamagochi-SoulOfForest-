@@ -28,14 +28,9 @@ class MealInventoryFragment : Fragment() {
 
         //TODO set meal list from json
         val mealList : ArrayList<Meal>? = context?.let { JSONHelper().getMeal(it) }
+
         //get previous meal
-        ivGetLeftMeal.setOnClickListener {
-            val tempNum = context?.let { JSONHelper().getNeeds(it) } as Needs
-            var str = "Happy: " + tempNum.getHappy() +
-                    "\nHungry: " + tempNum.getHungry() +
-                    "\nSleep: " + tempNum.getSleep()
-            Toast.makeText(context, str, Toast.LENGTH_LONG).show()
-        }
+        ivGetLeftMeal.setOnClickListener {  }
 
         ivMeal.setOnClickListener {
             var str = ""

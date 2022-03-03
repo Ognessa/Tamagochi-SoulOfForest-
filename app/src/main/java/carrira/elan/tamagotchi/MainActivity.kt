@@ -1,6 +1,9 @@
 package carrira.elan.tamagotchi
 
+
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
@@ -22,17 +25,21 @@ class MainActivity : AppCompatActivity() {
     private lateinit var ivDiningRoom : ImageView
     private lateinit var ivPlayRoom : ImageView
 
-    private lateinit var tvHappy : TextView
-    private lateinit var tvHungry : TextView
-    private lateinit var tvSleep : TextView
+    private lateinit var tvNeeds : TextView
 
+    lateinit var mUpdateReceiver : UpdateInfoReceiver
+    lateinit var intentFilter : IntentFilter
     private lateinit var lavTamagotchi : LottieAnimationView
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         changeRoom(PlayRoomFragment.newInstance())
+
+        //if(!File(applicationContext.filesDir, JSONHelper().pathFile).exists())
+            JSONHelper().createJSONDataFile(this)
 
         tvTamName = findViewById(R.id.tv_tam_name)
         lavTamagotchi = findViewById(R.id.lav_tamagotchi)
@@ -41,7 +48,11 @@ class MainActivity : AppCompatActivity() {
         ivDiningRoom = findViewById(R.id.iv_dining_room)
         ivPlayRoom = findViewById(R.id.iv_play_room)
 
-
+        val needs = JSONHelper().getNeeds(this)
+        tvNeeds = findViewById(R.id.tv_needs)
+        tvNeeds.text =  "Happy: "+ needs.getHappy() +
+                "%\nHungry: " + needs.getHungry() +
+                "%\nSleep: " + needs.getSleep() + "%"
 
         lavTamagotchi.setOnClickListener {
             lavTamagotchi.playAnimation()
@@ -64,11 +75,20 @@ class MainActivity : AppCompatActivity() {
 
         val intent = Intent(this, TamagotchiNeedsService::class.java)
         startService(intent)
+
+        mUpdateReceiver = UpdateInfoReceiver(tvNeeds)
+        intentFilter = IntentFilter(mUpdateReceiver.UPDATE_INFO_ACTION)
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        registerReceiver(mUpdateReceiver, intentFilter)
     }
 
     override fun onPause() {
         super.onPause()
-        stopService(intent)
+        unregisterReceiver(mUpdateReceiver)
     }
 
     private fun changeRoom(fr : Fragment){
@@ -93,15 +113,4 @@ class MainActivity : AppCompatActivity() {
                         .commit()
                 }
     }
-
-    /*fun onTamagotchiClickListener(){
-        if(!flag){
-            tvTamName.text = "Forest spirit"
-            flag = true
-        }
-        else{
-            tvTamName.text = "Tamagotchi"
-            flag = false
-        }
-    }*/
 }

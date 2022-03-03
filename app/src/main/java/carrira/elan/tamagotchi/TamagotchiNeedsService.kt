@@ -35,9 +35,11 @@ class TamagotchiNeedsService : Service() {
                                 "\nHungry: " + needs.getHungry() +
                                 "\nSleep: " + needs.getSleep())
                 JSONHelper().setNeeds(needs, this)
+
+                val intent = Intent("carrira.elan.tamagotchi.UPDATE_INFO_ACTION")
+                sendBroadcast(intent)
             }, 5000, 5000, TimeUnit.MILLISECONDS
         )
-
         return START_STICKY
     }
 
