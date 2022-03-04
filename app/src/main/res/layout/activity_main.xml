@@ -46,6 +46,7 @@
         app:layout_constraintVertical_bias="0.7" />
 
     <include
+        android:id="@+id/lu_interface"
         layout="@layout/user_interface"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -24,13 +24,19 @@ class TamagotchiNeedsService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Log.d(TAG, "onStartCommand")
         mScheduledExecutorService.scheduleAtFixedRate(
             Runnable {
+                val sleepCoefficient = JSONHelper().getSleepCoeff(this)
+                Log.d(TAG, sleepCoefficient.toString())
                 val needs = JSONHelper().getNeeds(this)
                 if(needs.getHappy() > 0) needs.setHappy(needs.getHappy()-1)
                 if(needs.getHungry() > 0) needs.setHungry(needs.getHungry()-1)
-                if(needs.getSleep() > 0) needs.setSleep(needs.getSleep()-1)
+                if(needs.getSleep() >= 0){
+                    if(needs.getSleep() + sleepCoefficient > 100)
+                        needs.setSleep(100)
+                    else
+                        needs.setSleep(needs.getSleep() + sleepCoefficient)
+                }
                 Log.d(TAG, "Happy: " + needs.getHappy() +
                                 "\nHungry: " + needs.getHungry() +
                                 "\nSleep: " + needs.getSleep())

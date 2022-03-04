@@ -20,8 +20,8 @@
 
     <ImageView
         android:id="@+id/iv_lamp"
-        android:layout_width="179dp"
-        android:layout_height="331dp"
-        android:layout_marginTop="250dp"
+        android:layout_width="126dp"
+        android:layout_height="261dp"
+        android:layout_marginTop="300dp"
         android:src="@drawable/lamp" />
 </FrameLayout>

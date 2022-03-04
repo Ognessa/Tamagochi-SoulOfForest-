@@ -14,6 +14,17 @@ class JSONHelper {
     @RequiresApi(Build.VERSION_CODES.R)
     val pathFile : String = "data.txt"
 
+    fun getSleepCoeff(context: Context) : Int{
+        val jsonObject = readDataFromFile(context)
+        return jsonObject.getInt("sleepCoefficient")
+    }
+
+    fun setSleepCoeff(coeff:Int, context: Context){
+        val jsonObject = readDataFromFile(context)
+        jsonObject.put("sleepCoefficient", coeff)
+        writeDataToFile(jsonObject.toString(), context)
+    }
+
     /**
      * Get list of meal from local file
      */
@@ -96,9 +107,8 @@ class JSONHelper {
             val fOut = FileOutputStream(File(path, pathFile))
             fOut.write(str.toByteArray(Charsets.UTF_8))
             fOut.close()
-            Log.d("DEBUG", "Success create file!")
         }catch (e:Exception){
-            Log.d("DEBUG", "Cannot create file!")
+            Log.d("DEBUG", "Cannot create/update file!")
         }
     }
 
@@ -121,7 +131,7 @@ class JSONHelper {
  * Object classes
  */
 
-class Meal(val title : String, val num : Int)
+class Meal(val title : String, var num : Int)
 
 class Needs(
     private var happy : Int,
