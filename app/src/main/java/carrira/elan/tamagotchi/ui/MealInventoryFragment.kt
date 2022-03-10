@@ -58,16 +58,18 @@ class MealInventoryFragment : Fragment() {
 
                 context?.let { it1 -> JSONHelper().setNeeds(needs, it1) }
 
-                //TODO minus meal number after add shop
-                //currentMeal.num = currentMeal.num - 1
-                //mealList[currentId] = currentMeal
-                //context?.let { it1 -> JSONHelper().setMeal(mealList, it1) }
+                currentMeal.num = currentMeal.num - 1
+                mealList[currentId] = currentMeal
+                context?.let { it1 -> JSONHelper().setMeal(mealList, it1) }
                 setNewMeal(currentMeal)
 
                 Toast.makeText(context, "Ням ням ням", Toast.LENGTH_LONG).show()
 
                 val intent = Intent("carrira.elan.tamagotchi.UPDATE_INFO_ACTION")
                 context?.let{it1 -> it1.sendBroadcast(intent)}
+
+                //TODO delete meal when num == 0 and move meal to prev/next
+
             }else{
                 Toast.makeText(context, "Ooops...", Toast.LENGTH_LONG).show()
             }
@@ -95,6 +97,7 @@ class MealInventoryFragment : Fragment() {
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
+
     fun setNewMeal(meal:Meal){
         ivMeal.setImageDrawable(requireContext().resources.getDrawable(
             requireContext().resources.getIdentifier(

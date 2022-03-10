@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="ui_icon_size">70dp</dimen>
+    <dimen name="ui_floor_size">200dp</dimen>
+    <dimen name="ui_tamagotchi_position">150dp</dimen>
+
+</resources>

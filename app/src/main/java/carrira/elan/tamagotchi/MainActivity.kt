@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import carrira.elan.tamagotchi.other.ShopActivity
 import carrira.elan.tamagotchi.rooms.BedroomFragment
 import carrira.elan.tamagotchi.rooms.DiningRoomFragment
 import carrira.elan.tamagotchi.rooms.PlayRoomFragment
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var ivBedroom : ImageView
     private lateinit var ivDiningRoom : ImageView
     private lateinit var ivPlayRoom : ImageView
+    private lateinit var ivShop : ImageView
 
     private lateinit var tvNeeds : TextView
 
@@ -53,12 +55,9 @@ class MainActivity : AppCompatActivity() {
         ivBedroom = findViewById(R.id.iv_bedroom)
         ivDiningRoom = findViewById(R.id.iv_dining_room)
         ivPlayRoom = findViewById(R.id.iv_play_room)
+        ivShop = findViewById(R.id.iv_shop)
 
-        val needs = JSONHelper().getNeeds(this)
         tvNeeds = findViewById(R.id.tv_needs)
-        tvNeeds.text =  "Happy: "+ needs.getHappy() +
-                "%\nHungry: " + needs.getHungry() +
-                "%\nSleep: " + needs.getSleep() + "%"
 
         lavTamagotchi.setOnClickListener {
             val n = JSONHelper().getNeeds(this)
@@ -94,6 +93,10 @@ class MainActivity : AppCompatActivity() {
             removeMealMenu()
         }
 
+        ivShop.setOnClickListener {
+            startActivity(Intent(this, ShopActivity::class.java))
+        }
+
         val intent = Intent(this, TamagotchiNeedsService::class.java)
         startService(intent)
 
@@ -102,10 +105,15 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onResume() {
         super.onResume()
         JSONHelper().setSleepCoeff(-1, this)
         userInterface.background = null
+        val needs = JSONHelper().getNeeds(this)
+        tvNeeds.text =  "Happy: "+ needs.getHappy() +
+                "%\nHungry: " + needs.getHungry() +
+                "%\nSleep: " + needs.getSleep() + "%"
         registerReceiver(mUpdateReceiver, intentFilter)
     }
 

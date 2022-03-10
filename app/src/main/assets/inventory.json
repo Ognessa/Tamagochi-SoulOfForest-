@@ -6,9 +6,9 @@
   },
 
   "needs":{
-    "happy": 100,
-    "hungry": 100,
-    "sleep": 100
+    "happy": 50,
+    "hungry": 50,
+    "sleep": 50
   },
 
   "sleepCoefficient" : -1
