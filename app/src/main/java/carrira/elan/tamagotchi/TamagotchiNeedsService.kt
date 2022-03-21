@@ -99,8 +99,6 @@ class TamagotchiNeedsService : Service() {
     }
 
     fun notification(text : String): Notification {
-        //TODO add remove notification to swap left/right and
-        //if tap not? move to app
         return notCompatB.setContentText(text).build()
     }
 }

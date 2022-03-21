@@ -1,4 +1,7 @@
 {
+  "isNamed" : false,
+  "name" : "Tamagotchi",
+
   "meal":{
     "apple" : 10,
     "banana" : 5,

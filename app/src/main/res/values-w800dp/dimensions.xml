@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Other -->
+    <dimen name="ui_icon_size">130dp</dimen>
+    <dimen name="ui_floor_size">300dp</dimen>
+
+    <!-- Pet size and position -->
+    <dimen name="ui_tamagotchi_position">220dp</dimen>
+    <dimen name="ui_tamagotchi_width">410dp</dimen>
+    <dimen name="ui_tamagotchi_height">620dp</dimen>
+
+    <!-- Lamp size and position -->
+    <dimen name="ui_lamp_bottom_margin">-30dp</dimen>
+    <dimen name="ui_lamp_width">150dp</dimen>
+    <dimen name="ui_lamp_height">300dp</dimen>
+
+    <!-- Text size -->
+    <dimen name="name_text_size">60sp</dimen>
+    <dimen name="needs_text_size">30sp</dimen>
+
+    <!-- Meal layout sizes -->
+    <dimen name="count_text_size">25sp</dimen>
+    <dimen name="meal_layout_height">200dp</dimen>
+
+</resources>

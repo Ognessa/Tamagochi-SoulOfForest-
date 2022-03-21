@@ -2,7 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="@dimen/meal_layout_height"
     android:weightSum="3"
     android:orientation="horizontal">
 
@@ -19,11 +19,14 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center">
+
         <ImageView
             android:id="@+id/iv_meal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/apple"/>
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/apple" />
 
         <TextView
             android:id="@+id/tv_meal_count"
@@ -37,7 +40,7 @@
             android:layout_marginBottom="2dp"
             android:gravity="bottom"
             android:text="0"
-            android:textSize="25sp"
+            android:textSize="@dimen/count_text_size"
             android:textColor="@color/black"
             android:background="@color/teal_200"/>
     </RelativeLayout>

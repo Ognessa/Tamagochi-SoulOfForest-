@@ -2,13 +2,16 @@ package carrira.elan.tamagotchi
 
 
 import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import carrira.elan.tamagotchi.other.ShopActivity
@@ -21,9 +24,7 @@ import java.io.File
 
 class MainActivity : AppCompatActivity() {
 
-    //var flag : Boolean = false
     private lateinit var tvTamName : TextView
-    //TODO create shadow when night
 
     private lateinit var ivBedroom : ImageView
     private lateinit var ivDiningRoom : ImageView
@@ -72,6 +73,13 @@ class MainActivity : AppCompatActivity() {
             sendBroadcast(intent)
         }
 
+        /**
+         * Set or change name for pet
+         */
+        if(!JSONHelper().isTamagotchiNamed(this)){setNameToTamagotchi()}
+        tvTamName.text = JSONHelper().getTamagotchiName(this)
+        tvTamName.setOnClickListener { setNameToTamagotchi() }
+
         ivBedroom.setOnClickListener {
             changeRoom(BedroomFragment.newInstance())
             removeMealMenu()
@@ -102,7 +110,6 @@ class MainActivity : AppCompatActivity() {
 
         mUpdateReceiver = UpdateInfoReceiver(tvNeeds)
         intentFilter = IntentFilter(mUpdateReceiver.UPDATE_INFO_ACTION)
-
     }
 
     @SuppressLint("SetTextI18n")
@@ -115,6 +122,7 @@ class MainActivity : AppCompatActivity() {
                 "%\nHungry: " + needs.getHungry() +
                 "%\nSleep: " + needs.getSleep() + "%"
         registerReceiver(mUpdateReceiver, intentFilter)
+
     }
 
     override fun onPause() {
@@ -143,5 +151,25 @@ class MainActivity : AppCompatActivity() {
                         .remove(fragmentManager.findFragmentById(R.id.meal_frame) as MealInventoryFragment)
                         .commit()
                 }
+    }
+
+    fun setNameToTamagotchi(){
+        val enterName = EditText(this)
+
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("Name your pet:")
+            .setView(enterName)
+            .setPositiveButton("Save", DialogInterface.OnClickListener { dialogInterface, i ->
+                JSONHelper().setTamagotchiName(this, enterName.text.toString())
+                tvTamName.text = JSONHelper().getTamagotchiName(this)
+                dialogInterface.cancel()
+            })
+            .setNegativeButton("Cancel", DialogInterface.OnClickListener { dialogInterface, i ->
+                tvTamName.text = JSONHelper().getTamagotchiName(this)
+                dialogInterface.cancel()
+            })
+
+        val alert : AlertDialog = builder.create()
+        alert.show()
     }
 }

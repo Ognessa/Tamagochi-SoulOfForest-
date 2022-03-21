@@ -25,6 +25,25 @@ class JSONHelper {
         writeDataToFile(jsonObject.toString(), context)
     }
 
+    fun getTamagotchiName(context : Context) : String{
+        val array : ArrayList<Meal> = arrayListOf()
+        val jsonObject = readDataFromFile(context)
+        return jsonObject.getString("name")
+    }
+
+    fun isTamagotchiNamed(context : Context) : Boolean{
+        val array : ArrayList<Meal> = arrayListOf()
+        val jsonObject = readDataFromFile(context)
+        return jsonObject.getBoolean("isNamed")
+    }
+
+    fun setTamagotchiName(context : Context, name : String){
+        val jsonObject = readDataFromFile(context)
+        jsonObject.put("name", name)
+        jsonObject.put("isNamed", true)
+        writeDataToFile(jsonObject.toString(), context)
+    }
+
     /**
      * Get list of meal from local file
      */
