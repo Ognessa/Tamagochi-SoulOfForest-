@@ -4,6 +4,11 @@
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
+    <!--
+    To allow use too large bitmap
+     android:largeHeap="true"
+     android:hardwareAccelerated="false"-->
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/icon"
@@ -11,7 +16,12 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+
+        android:largeHeap="true"
+        android:hardwareAccelerated="false"
+
         android:theme="@style/Theme.Tamagotchi.NoActionBar">
+
         <activity
             android:screenOrientation="portrait"
             android:name=".other.ShopActivity"

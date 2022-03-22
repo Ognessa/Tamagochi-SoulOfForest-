@@ -17,6 +17,7 @@ class TamagotchiNeedsService : Service() {
 
     val TAG = "DEBUG"
     lateinit var mScheduledExecutorService : ScheduledExecutorService
+    //lateinit var mScheduledExecutorServiceEyesAnimation : ScheduledExecutorService
     lateinit var notMan : NotificationManager
     lateinit var notCompatB : NotificationCompat.Builder
 
@@ -28,6 +29,8 @@ class TamagotchiNeedsService : Service() {
     override fun onCreate() {
         Log.d(TAG, "onCreate")
         mScheduledExecutorService = Executors.newScheduledThreadPool(1)
+        //mScheduledExecutorServiceEyesAnimation = Executors.newScheduledThreadPool(1)
+
         notMan = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notCompatB = getNotificationBuilder()
         notCompatB.setContentTitle("Tamagotchi")
@@ -90,6 +93,9 @@ class TamagotchiNeedsService : Service() {
                 sendBroadcast(intent)
             }, 60000, 60000, TimeUnit.MILLISECONDS
         )
+        /*mScheduledExecutorServiceEyesAnimation.scheduleAtFixedRate(Runnable {
+
+        }, 5000, 5000, TimeUnit.MILLISECONDS)*/
         return START_STICKY
     }
 

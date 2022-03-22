@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var mUpdateReceiver : UpdateInfoReceiver
     lateinit var intentFilter : IntentFilter
-    private lateinit var lavTamagotchi : LottieAnimationView
+    private lateinit var lavTamagotchi : View
     lateinit var userInterface : View
 
 
@@ -67,7 +67,8 @@ class MainActivity : AppCompatActivity() {
             else n.setHappy(n.getHappy()+10)
 
             JSONHelper().setNeeds(n, this)
-            lavTamagotchi.playAnimation()
+            findViewById<LottieAnimationView>(R.id.lav_ears).playAnimation()
+            findViewById<LottieAnimationView>(R.id.lav_eyes).playAnimation()
 
             val intent = Intent("carrira.elan.tamagotchi.UPDATE_INFO_ACTION")
             sendBroadcast(intent)
