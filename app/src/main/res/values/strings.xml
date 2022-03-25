@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Tamagotchi</string>
+
+    <!-- Rename pet View -->
+    <string name="pet_rename_text">Rename pet:</string>
+    <string name="pet_rename_hint">Name...</string>
+    <string name="pet_rename_ok">OK</string>
+    <string name="pet_rename_cancel">CANCEL</string>
 </resources>

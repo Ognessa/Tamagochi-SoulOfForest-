@@ -23,4 +23,8 @@
     <dimen name="count_text_size">25sp</dimen>
     <dimen name="meal_layout_height">200dp</dimen>
 
+    <!-- Set pet name View -->
+    <dimen name="pet_name_text_size">40sp</dimen>
+    <dimen name="pet_name_btn_text_size">30sp</dimen>
+
 </resources>

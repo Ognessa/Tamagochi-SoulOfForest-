@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
@@ -21,6 +22,7 @@ import carrira.elan.tamagotchi.rooms.PlayRoomFragment
 import carrira.elan.tamagotchi.ui.MealInventoryFragment
 import com.airbnb.lottie.LottieAnimationView
 import java.io.File
+import java.util.zip.Inflater
 
 class MainActivity : AppCompatActivity() {
 
@@ -154,23 +156,28 @@ class MainActivity : AppCompatActivity() {
                 }
     }
 
+    @SuppressLint("InflateParams")
     fun setNameToTamagotchi(){
-        val enterName = EditText(this)
+        val renamePetView : View = LayoutInflater.from(this).inflate(R.layout.pet_name_window, null)
+        val enterName = renamePetView.findViewById<EditText>(R.id.et_rename_pet)
+        val positivBtn = renamePetView.findViewById<TextView>(R.id.tv_rename_ok)
+        val negativeBtn = renamePetView.findViewById<TextView>(R.id.tv_rename_cancel)
 
         val builder = AlertDialog.Builder(this)
-        builder.setMessage("Name your pet:")
-            .setView(enterName)
-            .setPositiveButton("Save", DialogInterface.OnClickListener { dialogInterface, i ->
-                JSONHelper().setTamagotchiName(this, enterName.text.toString())
-                tvTamName.text = JSONHelper().getTamagotchiName(this)
-                dialogInterface.cancel()
-            })
-            .setNegativeButton("Cancel", DialogInterface.OnClickListener { dialogInterface, i ->
-                tvTamName.text = JSONHelper().getTamagotchiName(this)
-                dialogInterface.cancel()
-            })
+        builder.setView(renamePetView)
 
         val alert : AlertDialog = builder.create()
+
+        positivBtn.setOnClickListener {
+            JSONHelper().setTamagotchiName(this, enterName.text.toString())
+            tvTamName.text = JSONHelper().getTamagotchiName(this)
+            alert.cancel()
+        }
+        negativeBtn.setOnClickListener {
+            tvTamName.text = JSONHelper().getTamagotchiName(this)
+            alert.cancel()
+        }
+
         alert.show()
     }
 }
