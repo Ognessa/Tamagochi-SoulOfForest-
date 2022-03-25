@@ -21,10 +21,15 @@ class MealInventoryFragment : Fragment() {
     private lateinit var ivMeal : ImageView
     private lateinit var tvCount : TextView
 
+    private val jsonHelper = JSONHelper()
+    private lateinit var mealList : ArrayList<Meal>
+    private var currentId : Int = 0
+    private lateinit var currentMeal : Meal
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         val view : View = inflater.inflate(R.layout.meal_layout, container, false)
 
@@ -33,43 +38,20 @@ class MealInventoryFragment : Fragment() {
         ivMeal = view.findViewById(R.id.iv_meal)
         tvCount = view.findViewById(R.id.tv_meal_count)
 
-        val mealList : ArrayList<Meal>? = context?.let { JSONHelper().getMeal(it) }
-        var currentId = 0
-        var currentMeal : Meal = mealList!!.get(currentId)
+        mealList = jsonHelper.getMeal(requireContext())
+        currentId = 0
+        currentMeal = mealList[currentId]
         setNewMeal(currentMeal)
 
         //get previous meal
         ivGetLeftMeal.setOnClickListener {
-            if(currentId > 0){
-                currentId--
-                currentMeal = mealList.get(currentId)
-
-                setNewMeal(currentMeal)
-            }
+            getPrevMeal()
         }
 
+        //eat current meal
         ivMeal.setOnClickListener {
             if(currentMeal.num > 0){
-                val needs = context?.let { it1 -> JSONHelper().getNeeds(it1) }
-
-                if(needs!!.getHungry() + 25 < 100)
-                    needs!!.setHungry(needs.getHungry() + 25)
-                else needs!!.setHungry(100)
-
-                context?.let { it1 -> JSONHelper().setNeeds(needs, it1) }
-
-                currentMeal.num = currentMeal.num - 1
-                mealList[currentId] = currentMeal
-                context?.let { it1 -> JSONHelper().setMeal(mealList, it1) }
-                setNewMeal(currentMeal)
-
-                Toast.makeText(context, "Ням ням ням", Toast.LENGTH_LONG).show()
-
-                val intent = Intent("carrira.elan.tamagotchi.UPDATE_INFO_ACTION")
-                context?.let{it1 -> it1.sendBroadcast(intent)}
-
-                //TODO delete meal when num == 0 and move meal to prev/next
-
+                eat()
             }else{
                 Toast.makeText(context, "Ooops...", Toast.LENGTH_LONG).show()
             }
@@ -77,12 +59,7 @@ class MealInventoryFragment : Fragment() {
 
         //get next meal
         ivGetRightMeal.setOnClickListener {
-            if(currentId < mealList.size - 1 ){
-                currentId++
-                currentMeal = mealList.get(currentId)
-
-                setNewMeal(currentMeal)
-            }
+            getNextMeal()
         }
 
         return view
@@ -97,12 +74,50 @@ class MealInventoryFragment : Fragment() {
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-
     fun setNewMeal(meal:Meal){
         ivMeal.setImageDrawable(requireContext().resources.getDrawable(
             requireContext().resources.getIdentifier(
-                meal.title, "drawable", requireContext().packageName)))
+                meal.title, "drawable", requireContext().packageName), null))
         tvCount.text = meal.num.toString()
     }
 
+    private fun eat(){
+        val needs = jsonHelper.getNeeds(requireContext())
+
+        if(needs.getHungry() + currentMeal.satiety < 100)
+            needs.setHungry(needs.getHungry() + currentMeal.satiety)
+        else needs.setHungry(100)
+
+        jsonHelper.setNeeds(needs, requireContext())
+
+        currentMeal.num = currentMeal.num - 1
+        mealList[currentId] = currentMeal
+        jsonHelper.setMeal(mealList, requireContext())
+        setNewMeal(currentMeal)
+
+        Toast.makeText(context, "Ням ням ням", Toast.LENGTH_LONG).show()
+
+        val intent = Intent("carrira.elan.tamagotchi.UPDATE_INFO_ACTION")
+        context?.sendBroadcast(intent)
+
+        //TODO delete meal when num == 0 and move meal to prev/next
+    }
+
+    private fun getNextMeal(){
+        if(currentId < mealList.size - 1 ){
+            currentId++
+            currentMeal = mealList[currentId]
+
+            setNewMeal(currentMeal)
+        }
+    }
+
+    private fun getPrevMeal(){
+        if(currentId > 0){
+            currentId--
+            currentMeal = mealList[currentId]
+
+            setNewMeal(currentMeal)
+        }
+    }
 }

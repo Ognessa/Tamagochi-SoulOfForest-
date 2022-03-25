@@ -13,8 +13,6 @@ class UpdateInfoReceiver(val tv_text : TextView) : BroadcastReceiver() {
     @SuppressLint("SetTextI18n")
     override fun onReceive(context: Context, intent: Intent) {
         val needs = JSONHelper().getNeeds(context)
-        tv_text.text = "Happy: "+ needs.getHappy() +
-                "%\nHungry: " + needs.getHungry() +
-                "%\nSleep: " + needs.getSleep() + "%"
+        tv_text.text = needs.toString()
     }
 }

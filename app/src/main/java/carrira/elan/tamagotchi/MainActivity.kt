@@ -1,12 +1,12 @@
 package carrira.elan.tamagotchi
 
-
 import android.annotation.SuppressLint
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
@@ -22,7 +22,6 @@ import carrira.elan.tamagotchi.rooms.PlayRoomFragment
 import carrira.elan.tamagotchi.ui.MealInventoryFragment
 import com.airbnb.lottie.LottieAnimationView
 import java.io.File
-import java.util.zip.Inflater
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,11 +34,12 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var tvNeeds : TextView
 
-    lateinit var mUpdateReceiver : UpdateInfoReceiver
-    lateinit var intentFilter : IntentFilter
+    private lateinit var mUpdateReceiver : UpdateInfoReceiver
+    private lateinit var intentFilter : IntentFilter
     private lateinit var lavTamagotchi : View
-    lateinit var userInterface : View
+    private lateinit var userInterface : View
 
+    private val jsonHelper = JSONHelper()
 
     @SuppressLint("SetTextI18n", "ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,8 +48,8 @@ class MainActivity : AppCompatActivity() {
 
         changeRoom(PlayRoomFragment.newInstance())
 
-        if(!File(applicationContext.filesDir, JSONHelper().pathFile).exists())
-            JSONHelper().createJSONDataFile(this)
+        if(!File(applicationContext.filesDir, jsonHelper.pathFile).exists())
+            jsonHelper.createJSONDataFile(this)
 
         tvTamName = findViewById(R.id.tv_tam_name)
         lavTamagotchi = findViewById(R.id.lav_tamagotchi)
@@ -63,14 +63,13 @@ class MainActivity : AppCompatActivity() {
         tvNeeds = findViewById(R.id.tv_needs)
 
         lavTamagotchi.setOnClickListener {
-            val n = JSONHelper().getNeeds(this)
+            val n = jsonHelper.getNeeds(this)
 
-            if(n.getHappy()+10 > 100)n.setHappy(100)
+            if(n.getHappy()+10 > 100) n.setHappy(100)
             else n.setHappy(n.getHappy()+10)
 
-            JSONHelper().setNeeds(n, this)
+            jsonHelper.setNeeds(n, this)
             findViewById<LottieAnimationView>(R.id.lav_ears).playAnimation()
-            findViewById<LottieAnimationView>(R.id.lav_eyes).playAnimation()
 
             val intent = Intent("carrira.elan.tamagotchi.UPDATE_INFO_ACTION")
             sendBroadcast(intent)
@@ -79,8 +78,8 @@ class MainActivity : AppCompatActivity() {
         /**
          * Set or change name for pet
          */
-        if(!JSONHelper().isTamagotchiNamed(this)){setNameToTamagotchi()}
-        tvTamName.text = JSONHelper().getTamagotchiName(this)
+        if(!jsonHelper.isTamagotchiNamed(this)){setNameToTamagotchi()}
+        tvTamName.text = jsonHelper.getTamagotchiName(this)
         tvTamName.setOnClickListener { setNameToTamagotchi() }
 
         ivBedroom.setOnClickListener {
@@ -91,7 +90,7 @@ class MainActivity : AppCompatActivity() {
         ivDiningRoom.setOnClickListener {
             changeRoom(DiningRoomFragment.newInstance())
             //ivNightShadow.visibility = View.INVISIBLE
-            JSONHelper().setSleepCoeff(-1, this)
+            jsonHelper.setSleepCoeff(-1, this)
             userInterface.background = null
             setMealMenu()
         }
@@ -99,7 +98,7 @@ class MainActivity : AppCompatActivity() {
         ivPlayRoom.setOnClickListener {
             changeRoom(PlayRoomFragment.newInstance())
             //ivNightShadow.visibility = View.INVISIBLE
-            JSONHelper().setSleepCoeff(-1, this)
+            jsonHelper.setSleepCoeff(-1, this)
             userInterface.background = null
             removeMealMenu()
         }
@@ -113,17 +112,27 @@ class MainActivity : AppCompatActivity() {
 
         mUpdateReceiver = UpdateInfoReceiver(tvNeeds)
         intentFilter = IntentFilter(mUpdateReceiver.UPDATE_INFO_ACTION)
+
+        /**
+         * Play tamagotchi eyes animation every 4sec
+         * */
+        val mainHandler = Handler(Looper.getMainLooper())
+        mainHandler.post(object : Runnable {
+            override fun run(){
+                findViewById<LottieAnimationView>(R.id.lav_eyes).playAnimation()
+                mainHandler.postDelayed(this, 4000)
+            }
+        })
+
     }
 
     @SuppressLint("SetTextI18n")
     override fun onResume() {
         super.onResume()
-        JSONHelper().setSleepCoeff(-1, this)
+        jsonHelper.setSleepCoeff(-1, this)
         userInterface.background = null
-        val needs = JSONHelper().getNeeds(this)
-        tvNeeds.text =  "Happy: "+ needs.getHappy() +
-                "%\nHungry: " + needs.getHungry() +
-                "%\nSleep: " + needs.getSleep() + "%"
+        val needs = jsonHelper.getNeeds(this)
+        tvNeeds.text =  needs.toString()
         registerReceiver(mUpdateReceiver, intentFilter)
 
     }
@@ -169,12 +178,12 @@ class MainActivity : AppCompatActivity() {
         val alert : AlertDialog = builder.create()
 
         positivBtn.setOnClickListener {
-            JSONHelper().setTamagotchiName(this, enterName.text.toString())
-            tvTamName.text = JSONHelper().getTamagotchiName(this)
+            jsonHelper.setTamagotchiName(this, enterName.text.toString())
+            tvTamName.text = jsonHelper.getTamagotchiName(this)
             alert.cancel()
         }
         negativeBtn.setOnClickListener {
-            tvTamName.text = JSONHelper().getTamagotchiName(this)
+            tvTamName.text = jsonHelper.getTamagotchiName(this)
             alert.cancel()
         }
 

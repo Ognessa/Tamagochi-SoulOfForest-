@@ -50,11 +50,14 @@ class JSONHelper {
     fun getMeal(context : Context) : ArrayList<Meal>{
         val array : ArrayList<Meal> = arrayListOf()
         val jsonObject = readDataFromFile(context)
-        val jsonArray = jsonObject.getJSONObject("meal")
+        val jsonMeal = jsonObject.getJSONArray("meal")
 
-        array.add(Meal("apple", jsonArray.getInt("apple")))
-        array.add(Meal("banana", jsonArray.getInt("banana")))
-        array.add(Meal("soul", jsonArray.getInt("soul")))
+        for(i in 0 until jsonMeal.length()){
+            val title = jsonMeal.getJSONObject(i).getString("title")
+            val count = jsonMeal.getJSONObject(i).getInt("count")
+            val satiety = jsonMeal.getJSONObject(i).getInt("satiety")
+            array.add(Meal(title, count, satiety))
+        }
 
         return array
     }
@@ -64,10 +67,12 @@ class JSONHelper {
      */
     fun setMeal(list:ArrayList<Meal>, context: Context){
         val jsonObject = readDataFromFile(context)
-        val jsonArray = jsonObject.getJSONObject("meal")
+        val jsonArray = jsonObject.getJSONArray("meal")
 
-        for(i in list){
-            jsonArray.put(i.title, i.num)
+        for(i in 0 until list.size){
+            jsonArray.getJSONObject(i).put("title", list[i].title)
+            jsonArray.getJSONObject(i).put("count", list[i].num)
+            jsonArray.getJSONObject(i).put("satiety", list[i].satiety)
         }
 
         writeDataToFile(jsonObject.toString(), context)
@@ -150,7 +155,7 @@ class JSONHelper {
  * Object classes
  */
 
-class Meal(val title : String, var num : Int)
+class Meal(val title : String, var num : Int, val satiety : Int){}
 
 class Needs(
     private var happy : Int,
@@ -170,4 +175,11 @@ class Needs(
     fun setSleep(sleep: Int){
         this.sleep = sleep
     }
+
+    override fun toString() : String{
+        return "Happy: "+ getHappy() +
+                "%\nHungry: " + getHungry() +
+                "%\nSleep: " + getSleep() + "%"
+    }
+
 }

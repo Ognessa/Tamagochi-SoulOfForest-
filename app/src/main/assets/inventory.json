@@ -2,11 +2,23 @@
   "isNamed" : false,
   "name" : "Tamagotchi",
 
-  "meal":{
-    "apple" : 10,
-    "banana" : 5,
-    "soul" : 3
-  },
+  "meal":[
+     {
+      "title" : "apple",
+      "count" : 10,
+      "satiety" : 25
+    },
+    {
+      "title" : "banana",
+      "count" : 5,
+      "satiety" : 25
+    },
+    {
+      "title" : "soul",
+      "count" : 3,
+      "satiety" : 25
+    }
+  ],
 
   "needs":{
     "happy": 50,
