@@ -2,7 +2,7 @@ package carrira.elan.tamagotchi.other
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import carrira.elan.tamagotchi.JSONHelper
 import carrira.elan.tamagotchi.R
@@ -23,7 +23,7 @@ class ShopActivity : AppCompatActivity() {
         rvMealList = findViewById(R.id.rv_meal_list)
         adapter = RVAdapter(JSONHelper().getMeal(this), this)
 
-        rvMealList.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        rvMealList.layoutManager = GridLayoutManager(this, 2)
         rvMealList.adapter = adapter
 
         fabToPrev.setOnClickListener {

@@ -25,6 +25,19 @@ class JSONHelper {
         writeDataToFile(jsonObject.toString(), context)
     }
 
+    fun isJSONChanged(context: Context) : Boolean{
+        try{
+            val newCV = (JSONTokener(getJSONString(context)).nextValue() as JSONObject)
+                .getJSONObject("jsonCodeVersion")
+            val oldCV = readDataFromFile(context).getJSONObject("jsonCodeVersion")
+
+            return newCV == oldCV
+
+        }catch (e:Exception){
+            return false
+        }
+    }
+
     fun getTamagotchiName(context : Context) : String{
         val array : ArrayList<Meal> = arrayListOf()
         val jsonObject = readDataFromFile(context)
@@ -155,7 +168,7 @@ class JSONHelper {
  * Object classes
  */
 
-class Meal(val title : String, var num : Int, val satiety : Int){}
+class Meal(val title : String, var num : Int, val satiety : Int)
 
 class Needs(
     private var happy : Int,

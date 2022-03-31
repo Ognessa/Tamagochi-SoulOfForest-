@@ -11,6 +11,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <!--<ImageView
+        android:layout_width="@dimen/ui_tamagotchi_width"
+        android:layout_height="@dimen/shadow_height"
+        android:layout_alignStart="@+id/lav_tamagotchi"
+        android:layout_alignEnd="@+id/lav_tamagotchi"
+        android:layout_alignBottom="@+id/lav_tamagotchi"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="-10dp"
+        android:src="@drawable/shadow" />-->
+
     <include
         android:id="@+id/lav_tamagotchi"
         android:layout_width="@dimen/ui_tamagotchi_width"
@@ -26,6 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/ui_floor_size" />
+
 
     <include
         android:id="@+id/lu_interface"

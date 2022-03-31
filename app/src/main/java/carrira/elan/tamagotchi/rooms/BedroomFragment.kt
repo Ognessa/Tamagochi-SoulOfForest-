@@ -21,15 +21,18 @@ class BedroomFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_bedroom, container, false)
         val userInterface : View = requireActivity().findViewById(R.id.lu_interface)
 
+        val ivMushLight : ImageView = view.findViewById(R.id.mushroms_light)
         val ivLamp : ImageView = view.findViewById(R.id.iv_lamp)
 
         ivLamp.setOnClickListener {
-            if(context?.let { it1 -> JSONHelper().getSleepCoeff(it1) } == -1){
+            if(JSONHelper().getSleepCoeff(requireContext()) == -1){
                 userInterface.background = view.resources.getDrawable(R.drawable.night_shadow, null)
-                context?.let { it1 -> JSONHelper().setSleepCoeff(10, it1) }
+                ivMushLight.visibility = View.INVISIBLE
+                JSONHelper().setSleepCoeff(10, requireContext())
             }else{
                 userInterface.background = null
-                context?.let { it1 -> JSONHelper().setSleepCoeff(-1, it1) }
+                ivMushLight.visibility = View.VISIBLE
+                JSONHelper().setSleepCoeff(-1, requireContext())
             }
         }
 

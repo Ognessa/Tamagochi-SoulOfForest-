@@ -38,10 +38,7 @@ class MealInventoryFragment : Fragment() {
         ivMeal = view.findViewById(R.id.iv_meal)
         tvCount = view.findViewById(R.id.tv_meal_count)
 
-        mealList = jsonHelper.getMeal(requireContext())
-        currentId = 0
-        currentMeal = mealList[currentId]
-        setNewMeal(currentMeal)
+        initOrUpdateMeal()
 
         //get previous meal
         ivGetLeftMeal.setOnClickListener {
@@ -52,6 +49,10 @@ class MealInventoryFragment : Fragment() {
         ivMeal.setOnClickListener {
             if(currentMeal.num > 0){
                 eat()
+                if (currentMeal.num == 0 && checkMealAvailable()){
+                    getNextMeal()
+                }else
+                    setNewMeal(currentMeal)
             }else{
                 Toast.makeText(context, "Ooops...", Toast.LENGTH_LONG).show()
             }
@@ -65,6 +66,11 @@ class MealInventoryFragment : Fragment() {
         return view
     }
 
+    override fun onResume() {
+        initOrUpdateMeal()
+        super.onResume()
+    }
+
     companion object {
         fun newInstance() =
             MealInventoryFragment().apply {
@@ -75,10 +81,17 @@ class MealInventoryFragment : Fragment() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     fun setNewMeal(meal:Meal){
-        ivMeal.setImageDrawable(requireContext().resources.getDrawable(
-            requireContext().resources.getIdentifier(
-                meal.title, "drawable", requireContext().packageName), null))
-        tvCount.text = meal.num.toString()
+        if(checkMealAvailable()){
+            ivMeal.setImageDrawable(requireContext().resources.getDrawable(
+                requireContext().resources.getIdentifier(
+                    meal.title, "drawable", requireContext().packageName), null))
+            tvCount.text = meal.num.toString()
+        }
+        else{
+            ivMeal.setImageDrawable(requireContext().resources
+                .getDrawable(R.drawable.meal_not_available, null))
+            tvCount.text = "0"
+        }
     }
 
     private fun eat(){
@@ -104,20 +117,51 @@ class MealInventoryFragment : Fragment() {
     }
 
     private fun getNextMeal(){
-        if(currentId < mealList.size - 1 ){
+        if(checkMealAvailable()){
             currentId++
-            currentMeal = mealList[currentId]
-
-            setNewMeal(currentMeal)
+            if(currentId <= mealList.size - 1 ){
+                currentMeal = mealList[currentId]
+                if(currentMeal.num == 0) getNextMeal()
+                else setNewMeal(currentMeal)
+            }else{
+                currentId = 0
+                currentMeal = mealList[currentId]
+                if(currentMeal.num == 0) getNextMeal()
+                else setNewMeal(currentMeal)
+            }
         }
     }
 
     private fun getPrevMeal(){
-        if(currentId > 0){
+        if(checkMealAvailable()) {
             currentId--
-            currentMeal = mealList[currentId]
-
-            setNewMeal(currentMeal)
+            if (currentId >= 0) {
+                currentMeal = mealList[currentId]
+                if (currentMeal.num == 0) getPrevMeal()
+                else setNewMeal(currentMeal)
+            } else {
+                currentId = mealList.size - 1
+                currentMeal = mealList[currentId]
+                if (currentMeal.num == 0) getPrevMeal()
+                else setNewMeal(currentMeal)
+            }
         }
+    }
+
+    private fun checkMealAvailable() : Boolean{
+        for(i in mealList){
+            if(i.num > 0) return true
+        }
+
+        return false
+    }
+
+    fun initOrUpdateMeal(){
+        mealList = jsonHelper.getMeal(requireContext())
+        currentId = 0
+        currentMeal = mealList[currentId]
+
+        if(currentMeal.num > 0 || !checkMealAvailable()) setNewMeal(currentMeal)
+        else getNextMeal()
     }
 }

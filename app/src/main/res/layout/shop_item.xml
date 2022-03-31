@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
     android:gravity="center"
+    android:background="@color/shop_border_light"
     android:orientation="vertical">
 
     <ImageView
@@ -49,6 +50,8 @@
         android:id="@+id/btn_buy"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:text="Buy"/>
+        android:backgroundTint="@color/shop_background"
+        android:textColor="@color/black"
+        android:text="Buy" />
 
 </LinearLayout>

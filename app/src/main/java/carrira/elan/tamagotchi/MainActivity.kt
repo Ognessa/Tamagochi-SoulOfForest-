@@ -1,11 +1,14 @@
 package carrira.elan.tamagotchi
 
 import android.annotation.SuppressLint
+import android.content.ComponentName
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.ServiceConnection
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.os.IBinder
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
@@ -32,7 +35,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var ivPlayRoom : ImageView
     private lateinit var ivShop : ImageView
 
-    private lateinit var tvNeeds : TextView
+    lateinit var tvNeeds : TextView
 
     private lateinit var mUpdateReceiver : UpdateInfoReceiver
     private lateinit var intentFilter : IntentFilter
@@ -48,8 +51,11 @@ class MainActivity : AppCompatActivity() {
 
         changeRoom(PlayRoomFragment.newInstance())
 
-        if(!File(applicationContext.filesDir, jsonHelper.pathFile).exists())
-            jsonHelper.createJSONDataFile(this)
+        /**
+         * Update or create file
+         */
+        if(!File(applicationContext.filesDir, jsonHelper.pathFile).exists()
+            || jsonHelper.isJSONChanged(this)) jsonHelper.createJSONDataFile(this)
 
         tvTamName = findViewById(R.id.tv_tam_name)
         lavTamagotchi = findViewById(R.id.lav_tamagotchi)
@@ -109,6 +115,17 @@ class MainActivity : AppCompatActivity() {
 
         val intent = Intent(this, TamagotchiNeedsService::class.java)
         startService(intent)
+        /*val connection = object : ServiceConnection{
+            override fun onServiceConnected(p0: ComponentName?, p1: IBinder?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onServiceDisconnected(p0: ComponentName?) {
+                TODO("Not yet implemented")
+            }
+
+        }
+        bindService(intent, connection, BIND_AUTO_CREATE)*/
 
         mUpdateReceiver = UpdateInfoReceiver(tvNeeds)
         intentFilter = IntentFilter(mUpdateReceiver.UPDATE_INFO_ACTION)

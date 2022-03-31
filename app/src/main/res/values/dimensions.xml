@@ -11,9 +11,9 @@
     <dimen name="ui_tamagotchi_height">400dp</dimen>
 
     <!-- Lamp size and position -->
-    <dimen name="ui_lamp_bottom_margin">-15dp</dimen>
-    <dimen name="ui_lamp_width">80dp</dimen>
-    <dimen name="ui_lamp_height">150dp</dimen>
+    <dimen name="ui_lamp_bottom_margin">-40dp</dimen>
+    <dimen name="ui_lamp_width">130dp</dimen>
+    <dimen name="ui_lamp_height">190dp</dimen>
 
     <!-- Text size -->
     <dimen name="name_text_size">40sp</dimen>
@@ -27,4 +27,7 @@
     <dimen name="pet_name_text_size">30sp</dimen>
     <dimen name="pet_name_btn_text_size">25sp</dimen>
 
+    <!-- Shadow radius -->
+    <dimen name="shadow_radius">80dp</dimen>
+    <dimen name="shadow_height">80dp</dimen>
 </resources>

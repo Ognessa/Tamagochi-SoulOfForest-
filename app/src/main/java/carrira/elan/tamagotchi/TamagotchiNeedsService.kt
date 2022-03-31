@@ -8,6 +8,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
+import android.widget.TextView
 import androidx.core.app.NotificationCompat
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
@@ -102,5 +103,13 @@ class TamagotchiNeedsService : Service() {
 
     fun notification(text : String): Notification {
         return notCompatB.setContentText(text).build()
+    }
+}
+
+class NeedsBinder : INeedsServiceInterface.Stub() {
+    override fun setNewNeedsValues(tvNeedsId : Int) {
+        val tvNeeds : TextView = MainActivity().findViewById(tvNeedsId)
+        tvNeeds.text = JSONHelper().getNeeds(MainActivity().applicationContext).toString()
+        Log.d("DEBUG", "Updated")
     }
 }
