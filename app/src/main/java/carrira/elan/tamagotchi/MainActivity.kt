@@ -1,14 +1,10 @@
 package carrira.elan.tamagotchi
 
 import android.annotation.SuppressLint
-import android.content.ComponentName
 import android.content.Intent
-import android.content.IntentFilter
-import android.content.ServiceConnection
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.os.IBinder
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
@@ -27,7 +23,6 @@ import com.airbnb.lottie.LottieAnimationView
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
-
     private lateinit var tvTamName : TextView
 
     private lateinit var ivBedroom : ImageView
@@ -35,10 +30,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var ivPlayRoom : ImageView
     private lateinit var ivShop : ImageView
 
-    lateinit var tvNeeds : TextView
+    private lateinit var ivHappyIndicator : ImageView
+    private lateinit var ivHungryIndicator : ImageView
+    private lateinit var ivSleepyIndicator : ImageView
 
-    private lateinit var mUpdateReceiver : UpdateInfoReceiver
-    private lateinit var intentFilter : IntentFilter
+    private lateinit var tvNeeds : TextView
+
     private lateinit var lavTamagotchi : View
     private lateinit var userInterface : View
 
@@ -66,6 +63,10 @@ class MainActivity : AppCompatActivity() {
         ivPlayRoom = findViewById(R.id.iv_play_room)
         ivShop = findViewById(R.id.iv_shop)
 
+        ivHappyIndicator = findViewById(R.id.iv_happy_indicator)
+        ivHungryIndicator = findViewById(R.id.iv_hungry_indicator)
+        ivSleepyIndicator = findViewById(R.id.iv_sleepy_indicator)
+
         tvNeeds = findViewById(R.id.tv_needs)
 
         lavTamagotchi.setOnClickListener {
@@ -76,9 +77,7 @@ class MainActivity : AppCompatActivity() {
 
             jsonHelper.setNeeds(n, this)
             findViewById<LottieAnimationView>(R.id.lav_ears).playAnimation()
-
-            val intent = Intent("carrira.elan.tamagotchi.UPDATE_INFO_ACTION")
-            sendBroadcast(intent)
+            updateNeeds()
         }
 
         /**
@@ -95,7 +94,6 @@ class MainActivity : AppCompatActivity() {
 
         ivDiningRoom.setOnClickListener {
             changeRoom(DiningRoomFragment.newInstance())
-            //ivNightShadow.visibility = View.INVISIBLE
             jsonHelper.setSleepCoeff(-1, this)
             userInterface.background = null
             setMealMenu()
@@ -103,7 +101,6 @@ class MainActivity : AppCompatActivity() {
 
         ivPlayRoom.setOnClickListener {
             changeRoom(PlayRoomFragment.newInstance())
-            //ivNightShadow.visibility = View.INVISIBLE
             jsonHelper.setSleepCoeff(-1, this)
             userInterface.background = null
             removeMealMenu()
@@ -112,35 +109,26 @@ class MainActivity : AppCompatActivity() {
         ivShop.setOnClickListener {
             startActivity(Intent(this, ShopActivity::class.java))
         }
+    }
 
+    override fun onStart() {
+        super.onStart()
         val intent = Intent(this, TamagotchiNeedsService::class.java)
         startService(intent)
-        /*val connection = object : ServiceConnection{
-            override fun onServiceConnected(p0: ComponentName?, p1: IBinder?) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onServiceDisconnected(p0: ComponentName?) {
-                TODO("Not yet implemented")
-            }
-
-        }
-        bindService(intent, connection, BIND_AUTO_CREATE)*/
-
-        mUpdateReceiver = UpdateInfoReceiver(tvNeeds)
-        intentFilter = IntentFilter(mUpdateReceiver.UPDATE_INFO_ACTION)
 
         /**
-         * Play tamagotchi eyes animation every 4sec
+         * Play tamagotchi eyes animation
+         * Update needs text
+         * Every 4sec
          * */
         val mainHandler = Handler(Looper.getMainLooper())
         mainHandler.post(object : Runnable {
             override fun run(){
                 findViewById<LottieAnimationView>(R.id.lav_eyes).playAnimation()
-                mainHandler.postDelayed(this, 4000)
+                updateNeeds()
+                mainHandler.postDelayed(this, 6000)
             }
         })
-
     }
 
     @SuppressLint("SetTextI18n")
@@ -148,15 +136,6 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         jsonHelper.setSleepCoeff(-1, this)
         userInterface.background = null
-        val needs = jsonHelper.getNeeds(this)
-        tvNeeds.text =  needs.toString()
-        registerReceiver(mUpdateReceiver, intentFilter)
-
-    }
-
-    override fun onPause() {
-        super.onPause()
-        unregisterReceiver(mUpdateReceiver)
     }
 
     private fun changeRoom(fr : Fragment){
@@ -180,6 +159,19 @@ class MainActivity : AppCompatActivity() {
                         .remove(fragmentManager.findFragmentById(R.id.meal_frame) as MealInventoryFragment)
                         .commit()
                 }
+    }
+
+    fun updateNeeds(){
+        val needs = jsonHelper.getNeeds(applicationContext)
+        val onePercentSize = (resources.getDimensionPixelOffset(R.dimen.ui_icon_size) * 1.5 / 100).toInt()
+        tvNeeds.text = needs.toString()
+        ivHappyIndicator.layoutParams.height = needs.getHappy() * onePercentSize
+        ivHungryIndicator.layoutParams.height  = needs.getHungry() * onePercentSize
+        ivSleepyIndicator.layoutParams.height = needs.getSleep() * onePercentSize
+        ivHappyIndicator.requestLayout()
+        ivHungryIndicator.requestLayout()
+        ivSleepyIndicator.requestLayout()
+        //TODO resize
     }
 
     @SuppressLint("InflateParams")

@@ -3,12 +3,13 @@
 
     <!-- Other -->
     <dimen name="ui_icon_size">70dp</dimen>
+    <dimen name="ui_icon_padding">15dp</dimen>
     <dimen name="ui_floor_size">200dp</dimen>
 
     <!-- Pet size and position -->
     <dimen name="ui_tamagotchi_position">150dp</dimen>
-    <dimen name="ui_tamagotchi_width">210dp</dimen>
-    <dimen name="ui_tamagotchi_height">400dp</dimen>
+    <dimen name="ui_tamagotchi_width">160dp</dimen>
+    <dimen name="ui_tamagotchi_height">310dp</dimen>
 
     <!-- Lamp size and position -->
     <dimen name="ui_lamp_bottom_margin">-40dp</dimen>

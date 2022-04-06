@@ -3,6 +3,7 @@
 
     <!-- Other -->
     <dimen name="ui_icon_size">130dp</dimen>
+    <dimen name="ui_icon_padding">40dp</dimen>
     <dimen name="ui_floor_size">300dp</dimen>
 
     <!-- Pet size and position -->

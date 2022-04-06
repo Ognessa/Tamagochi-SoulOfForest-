@@ -1,7 +1,6 @@
 package carrira.elan.tamagotchi.ui
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import carrira.elan.tamagotchi.JSONHelper
+import carrira.elan.tamagotchi.MainActivity
 import carrira.elan.tamagotchi.Meal
 import carrira.elan.tamagotchi.R
 
@@ -109,11 +109,6 @@ class MealInventoryFragment : Fragment() {
         setNewMeal(currentMeal)
 
         Toast.makeText(context, "Ням ням ням", Toast.LENGTH_LONG).show()
-
-        val intent = Intent("carrira.elan.tamagotchi.UPDATE_INFO_ACTION")
-        context?.sendBroadcast(intent)
-
-        //TODO delete meal when num == 0 and move meal to prev/next
     }
 
     private fun getNextMeal(){

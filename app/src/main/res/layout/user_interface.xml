@@ -40,6 +40,53 @@
         android:textSize="@dimen/needs_text_size" />
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="0dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="4">
+
+        <ImageView
+            android:id="@+id/iv_happy_indicator"
+            android:layout_width="@dimen/ui_icon_size"
+            android:layout_height="@dimen/ui_icon_size"
+            android:layout_weight="1"
+            android:contentDescription="TODO"
+            android:layout_gravity="bottom"
+            android:adjustViewBounds="true"
+            android:paddingRight="@dimen/ui_icon_padding"
+            android:paddingLeft="@dimen/ui_icon_padding"
+            app:srcCompat="@drawable/happy_indicator" />
+
+        <ImageView
+            android:id="@+id/iv_hungry_indicator"
+            android:layout_width="@dimen/ui_icon_size"
+            android:layout_height="@dimen/ui_icon_size"
+            android:layout_weight="1"
+            android:layout_gravity="bottom"
+            android:adjustViewBounds="true"
+            android:contentDescription="TODO"
+            android:paddingRight="@dimen/ui_icon_padding"
+            android:paddingLeft="@dimen/ui_icon_padding"
+            app:srcCompat="@drawable/hungry_indicator" />
+
+        <ImageView
+            android:id="@+id/iv_sleepy_indicator"
+            android:layout_width="@dimen/ui_icon_size"
+            android:layout_height="@dimen/ui_icon_size"
+            android:layout_weight="1"
+            android:layout_gravity="bottom"
+            android:adjustViewBounds="true"
+            android:contentDescription="TODO"
+            android:paddingRight="@dimen/ui_icon_padding"
+            android:paddingLeft="@dimen/ui_icon_padding"
+            app:srcCompat="@drawable/sleepy_indicator" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -74,4 +121,5 @@
             app:srcCompat="@drawable/ic_bedroom" />
 
     </LinearLayout>
+
 </RelativeLayout>

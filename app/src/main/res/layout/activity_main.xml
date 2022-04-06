@@ -15,7 +15,7 @@
         android:id="@+id/lav_tamagotchi"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        layout="@layout/fragment_play_room" />-->
+        layout="@layout/fragment_bedroom" />-->
 
     <include
         android:id="@+id/lav_tamagotchi"
