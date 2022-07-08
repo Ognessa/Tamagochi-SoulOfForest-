@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var userInterface : View
 
     private val jsonHelper = JSONHelper()
+    private var blinking : Int = 0
 
     @SuppressLint("SetTextI18n", "ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -109,12 +110,6 @@ class MainActivity : AppCompatActivity() {
         ivShop.setOnClickListener {
             startActivity(Intent(this, ShopActivity::class.java))
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        val intent = Intent(this, TamagotchiNeedsService::class.java)
-        startService(intent)
 
         /**
          * Play tamagotchi eyes animation
@@ -124,11 +119,21 @@ class MainActivity : AppCompatActivity() {
         val mainHandler = Handler(Looper.getMainLooper())
         mainHandler.post(object : Runnable {
             override fun run(){
-                findViewById<LottieAnimationView>(R.id.lav_eyes).playAnimation()
+                if(blinking == 60){
+                    findViewById<LottieAnimationView>(R.id.lav_eyes).playAnimation()
+                    blinking = 0
+                }
                 updateNeeds()
-                mainHandler.postDelayed(this, 6000)
+                blinking++
+                mainHandler.postDelayed(this, 100)
             }
         })
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val intent = Intent(this, TamagotchiNeedsService::class.java)
+        startService(intent)
     }
 
     @SuppressLint("SetTextI18n")
@@ -163,15 +168,14 @@ class MainActivity : AppCompatActivity() {
 
     fun updateNeeds(){
         val needs = jsonHelper.getNeeds(applicationContext)
-        val onePercentSize = (resources.getDimensionPixelOffset(R.dimen.ui_icon_size) * 1.5 / 100).toInt()
+        val onePercentSize = (resources.getDimensionPixelOffset(R.dimen.ui_icon_size) / 100.0)
         tvNeeds.text = needs.toString()
-        ivHappyIndicator.layoutParams.height = needs.getHappy() * onePercentSize
-        ivHungryIndicator.layoutParams.height  = needs.getHungry() * onePercentSize
-        ivSleepyIndicator.layoutParams.height = needs.getSleep() * onePercentSize
+        ivHappyIndicator.layoutParams.height = (needs.getHappy() * onePercentSize).toInt()
+        ivHungryIndicator.layoutParams.height  = (needs.getHungry() * onePercentSize).toInt()
+        ivSleepyIndicator.layoutParams.height = (needs.getSleep() * onePercentSize).toInt()
         ivHappyIndicator.requestLayout()
         ivHungryIndicator.requestLayout()
         ivSleepyIndicator.requestLayout()
-        //TODO resize
     }
 
     @SuppressLint("InflateParams")

@@ -21,7 +21,7 @@
         <entry key="..\:/Projects/Android/Tamagochi/app/src/main/res/drawable/shadow.xml" value="0.198" />
         <entry key="..\:/Projects/Android/Tamagochi/app/src/main/res/drawable/sleepy_indicator.xml" value="0.198" />
         <entry key="..\:/Projects/Android/Tamagochi/app/src/main/res/drawable/tamagochi_body.xml" value="0.1885" />
-        <entry key="..\:/Projects/Android/Tamagochi/app/src/main/res/layout/activity_main.xml" value="0.17" />
+        <entry key="..\:/Projects/Android/Tamagochi/app/src/main/res/layout/activity_main.xml" value="0.18" />
         <entry key="..\:/Projects/Android/Tamagochi/app/src/main/res/layout/activity_shop.xml" value="0.19" />
         <entry key="..\:/Projects/Android/Tamagochi/app/src/main/res/layout/fragment_bedroom.xml" value="0.12" />
         <entry key="..\:/Projects/Android/Tamagochi/app/src/main/res/layout/fragment_dining_room.xml" value="0.20572916666666666" />
@@ -30,7 +30,7 @@
         <entry key="..\:/Projects/Android/Tamagochi/app/src/main/res/layout/pet_name_window.xml" value="0.1" />
         <entry key="..\:/Projects/Android/Tamagochi/app/src/main/res/layout/shop_item.xml" value="0.25" />
         <entry key="..\:/Projects/Android/Tamagochi/app/src/main/res/layout/tamagotchi.xml" value="0.18" />
-        <entry key="..\:/Projects/Android/Tamagochi/app/src/main/res/layout/user_interface.xml" value="0.18" />
+        <entry key="..\:/Projects/Android/Tamagochi/app/src/main/res/layout/user_interface.xml" value="0.12" />
       </map>
     </option>
   </component>

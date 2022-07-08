@@ -11,7 +11,6 @@ import java.lang.Exception
 
 class JSONHelper {
     private val fileName = "inventory.json"
-    @RequiresApi(Build.VERSION_CODES.R)
     val pathFile : String = "data.txt"
 
     fun getSleepCoeff(context: Context) : Int{
